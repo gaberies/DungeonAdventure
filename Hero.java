@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 /**
  * Title: Hero.java
@@ -23,19 +24,21 @@
  * @version 1.0
  */
 /*
- * Modify: 
- *  .change to private filed get rid of readName() method and use scanner
- *  .add SkillBehavior specialSkill and get/setSpecialSkill()
- *  .no need defend() so removed. modified subtractHitPoints() 
- *  .add getNumTurns()
- *  .add attack method 
- *  .Change battleChoices() methods name to setNumTurns()
+ * Modify: .change to private filed get rid of readName() method and use scanner
+ * .add SkillBehavior specialSkill and get/setSpecialSkill() .no need defend()
+ * so removed. modified subtractHitPoints() .add getNumTurns() .add attack
+ * method .Change battleChoices() methods name to setNumTurns()
  */
 
 public abstract class Hero extends DungeonCharacter {
 	private double chanceToBlock;
 	protected int numTurns;
 	protected SkillBehavior specialSkill;
+	protected int numOfHealingPotions;
+	protected int numOfVisionPotions;
+	protected int numOfPillars;
+	protected int heroPosRow;
+	protected int heroPosCol;
 
 //-----------------------------------------------------------------
 //calls base constructor and gets name of hero from user
@@ -47,8 +50,11 @@ public abstract class Hero extends DungeonCharacter {
 		System.out.print("Enter character name: ");
 		name = sc.nextLine();
 		setName(name);
+
+		heroPosRow = (int) (Math.random() * 5 + 1);
+		heroPosCol = (int) (Math.random() * 5 + 1);
 	}
-	
+
 	public int getNumTurns() {
 		return this.numTurns;
 	}
@@ -61,14 +67,15 @@ public abstract class Hero extends DungeonCharacter {
 	public SkillBehavior getSpecialSkill() {
 		return specialSkill;
 	}
+
 	public void setSpeacialSkill(SkillBehavior specialSkill) {
 		this.specialSkill = specialSkill;
 	}
-	public void specialSkillAttack(Monster opponent)
-	  {
+
+	public void specialSkillAttack(Monster opponent) {
 		specialSkill.execute(this, opponent);
 		numTurns--;
-	  }
+	}
 
 	/*-------------------------------------------------------
 	readName obtains a name for the hero from the user
@@ -110,6 +117,7 @@ public abstract class Hero extends DungeonCharacter {
 	This method calls: defend() or base version of method
 	This method is called by: attack() from base class
 	---------------------------------------------------------*/
+
 	public void subtractHitPoints(int hitPoints) {
 		/*
 		 * if (defend()) { System.out.println(name + " BLOCKED the attack!"); } else {
@@ -143,6 +151,46 @@ public abstract class Hero extends DungeonCharacter {
 			numTurns++;
 
 		System.out.println("Number of turns this round is: " + numTurns);
+	}
+
+	public void showHeroPos() {
+		System.out.println("The hero is at [" + this.heroPosRow + "][" + this.heroPosCol + "]");
+	}
+
+	public void moveHero(String move) {
+
+		if (move.equals("u")) {
+			if (this.heroPosRow != 1) {
+				this.heroPosRow--;
+			} else {
+				System.out.println("you're already at the top of the maze!");
+			}
+		} else if (move.equals("d")) {
+			if (this.heroPosRow != 5) {
+				this.heroPosRow++;
+			} else {
+				System.out.println("you're already at the bottom of the maze!");
+			}
+		} else if (move.equals("l")) {
+			if (this.heroPosCol != 1) {
+				this.heroPosCol--;
+			} else {
+				System.out.println("you're as far left as you can go!");
+			}
+		} else if (move.equals("r")) {
+			if (this.heroPosCol != 5) {
+				this.heroPosCol++;
+			} else {
+				System.out.println("you're as far right as you can go!");
+			}
+		}
+
+	}
+
+	public String ToString() {
+		return this.getName() + " has " + this.getHitPoints() + " and " + this.numOfHealingPotions
+				+ " Healing potions, " + this.numOfVisionPotions + " Vision Potions and has found " + this.numOfPillars
+				+ " Pillars of OO";
 	}
 	/*
 	 * public void battleChoices(DungeonCharacter opponent) { // numTurns =
