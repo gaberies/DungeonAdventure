@@ -1,4 +1,4 @@
-import java.util.Scanner;
+
 
 /**
  * Title: DungeonCharacter.java
@@ -32,43 +32,34 @@ import java.util.Scanner;
  * @author
  * @version 1.0
  */
-/* Modify:
- * 	.change protected to private field
- * 	.add Scanner
- *  .add setName()
- *  .no need Comparable so removed.
- *  .add String attackMessage
- *  .add get/setAttackMessage(),  getDamageMax/Min
- *  .add System.out.println(name + attackMessage +
-				   opponent.getName() + ":"); in attack(opponent) method
- * 
- */
 
+/*Modify:
+	    all data fiels should be private 
+	    remove Comparabale and compareTo()
+	    add setName()
+	    add attackMessage in the field and use it in attack() methods:
+	    System.out.println(name + attackMessage +
+				   opponent.getName() + ":");
+
+*/
 //public abstract class DungeonCharacter implements Comparable
-public abstract class DungeonCharacter 
-
+	public abstract class DungeonCharacter
 {
 
-	
-/*	protected String name;
-	protected int hitPoints;
-	protected int attackSpeed;
-	protected double chanceToHit;
-	protected int damageMin, damageMax; */
-	protected Scanner sc = new Scanner(System.in);
+
+
 	private String name;
 	private int hitPoints;
 	private int attackSpeed;
 	private double chanceToHit;
 	private int damageMin, damageMax;
-	private String attackMessage;
+	protected String attackMessage;
 
-
-/*	public int compareTo(Object o)
+	/*public int compareTo(Object o)
 	{
 		return 1;
-	}
-*/
+	}*/
+
 //-----------------------------------------------------------------
 //explicit constructor to initialize instance variables -- it is called
 // by derived classes
@@ -101,24 +92,14 @@ public abstract class DungeonCharacter
 	{
 		return attackSpeed;
 	}//end getAttackSpeed
+
 	public void setName(String name) {
-		this.name=name;
-	}
-	
-	public String getAttackMessage() {
-		return this.attackMessage;
-	}
-	public void setAttackMessage(String msg) {
-		this.attackMessage = msg;
+		this.name = name;
 	}
 	
 
-	public int getDamageMax() {
-		return damageMax;
-	}
-	public int getDamageMin() {
-		return damageMin;
-	} 
+	//add get/set for chanceToHit, damageMin, damageMax
+	
 
 
 /*-------------------------------------------------------
@@ -205,6 +186,7 @@ hero classes and externally
 	{
 		boolean canAttack;
 		int damage;
+
 		System.out.println(name + attackMessage +
 				   opponent.getName() + ":");
 

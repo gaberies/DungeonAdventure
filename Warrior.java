@@ -17,14 +17,15 @@ public class Warrior extends Hero
 
     public Warrior()
 	{
+
 		super("Warrior", 125, 4, .8, 35, 60, .2);
-		setAttackMessage(" swings a mighty sword at ");
-		specialSkill = new CrushingBlow();
+		attackMessage = " swings a mighty sword at ";
+
 
     }//end constructor
-}//end Hero class
 
-/*	public void crushingBlow(DungeonCharacter opponent)
+
+	public void crushingBlow(DungeonCharacter opponent)
 	{
 		if (Math.random() <= .4)
 		{
@@ -40,10 +41,10 @@ public class Warrior extends Hero
 		}//blow failed
 
 	}//end crushingBlow method
-*/
+
 /*	public void attack(DungeonCharacter opponent)
 	{
-		System.out.println(this.getName() + " swings a mighty sword at " +
+		System.out.println(name + " swings a mighty sword at " +
 							opponent.getName() + ":");
 		super.attack(opponent);
 	}//end override of attack method
@@ -51,7 +52,7 @@ public class Warrior extends Hero
 
 */
 
-   /* public void battleChoices(DungeonCharacter opponent)
+    public void battleChoices(DungeonCharacter opponent)
 	{
 		int choice;
 
@@ -62,7 +63,7 @@ public class Warrior extends Hero
 		    System.out.println("1. Attack Opponent");
 		    System.out.println("2. Crushing Blow on Opponent");
 		    System.out.print("Choose an option: ");
-		    choice = Keyboard.readInt();
+		    choice = sc.nextInt();
 
 		    switch (choice)
 		    {
@@ -81,4 +82,5 @@ public class Warrior extends Hero
 		} while(numTurns > 0);
 
     }//end battleChoices method
-*/
+
+}//end Hero class

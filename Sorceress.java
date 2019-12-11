@@ -8,9 +8,7 @@
  * @author
  * @version 1.0
  */
-/*
- * use get methods for private var
- */
+
 
 
 public class Sorceress extends Hero
@@ -22,14 +20,13 @@ public class Sorceress extends Hero
     public Sorceress()
 	{
 		super("Sorceress", 75, 5, .7, 25, 50, .3);
-		setAttackMessage(" casts a spell of fireball at ");
-		specialSkill = new IncreaseHitPoints();
+		attackMessage = " casts a spell of fireball at ";
 
 
     }//end constructor
-}//end class
+
 //-----------------------------------------------------------------
-/*	public void increaseHitPoints()
+	public void increaseHitPoints()
     {
 	    int hPoints;
 
@@ -41,17 +38,17 @@ public class Sorceress extends Hero
 		 System.out.println();
 
     }//end increaseHitPoints method
-*/
+
 //-----------------------------------------------------------------
 /*	public void attack(DungeonCharacter opponent)
 	{
-		System.out.println(this.getName() + " casts a spell of fireball at " +
+		System.out.println(name + " casts a spell of fireball at " +
 							opponent.getName() + ":");
 		super.attack(opponent);
-	}//end override of attack method
-*/
+	}//end override of attack method */
+
 //-----------------------------------------------------------------
- /*   public void battleChoices(DungeonCharacter opponent)
+    public void battleChoices(DungeonCharacter opponent)
 	{
 		super.battleChoices(opponent);
 		int choice;
@@ -61,7 +58,7 @@ public class Sorceress extends Hero
 		    System.out.println("1. Attack Opponent");
 		    System.out.println("2. Increase Hit Points");
 		    System.out.print("Choose an option: ");
-		    choice = Keyboard.readInt();
+		    choice = sc.nextInt();
 
 		    switch (choice)
 		    {
@@ -80,4 +77,5 @@ public class Sorceress extends Hero
 		} while(numTurns > 0 && this.getHitPoints() > 0 && opponent.getHitPoints() > 0);
 
     }//end overridden method
-*/
+
+}//end class

@@ -1,21 +1,23 @@
-
-
-
-
+// add MonsterFactory class to create monster
 public class MonsterFactory {
 
-    public Monster buildMonster(int choice){
-        switch(choice){
-            case 1: return new Gremlin();
-
-            case 2: return new Ogre();
-
-            case 3: return new Skeleton();
-
-            // if fail then returning the default monster which skeleton
-
-            default: return new Skeleton();
+    public Monster buildMonster(int choice) {
+    	Monster monster = null;
+        switch (choice) {
+        case 1:
+        	monster = new Ogre();
+            break;
+        case 2:
+        	monster = new Skeleton();
+            break;
+        case 3:
+        	monster = new Gremlin();
+            break;
+        default: return new Skeleton();
         }
-
+        return monster;
     }
 }
+
+
+ 
