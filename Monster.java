@@ -8,12 +8,11 @@
  * @author
  * @version 1.0
  */
-/*
- * Modify:
- * change to private field
- * use get methods to get private var
- */
 
+/*Modify
+	change to private for data field
+	change to getName() and getHitPoint()
+*/
 public abstract class Monster extends DungeonCharacter
 {
 	private double chanceToHeal;
@@ -38,18 +37,14 @@ public abstract class Monster extends DungeonCharacter
 	boolean canHeal;
 	int healPoints;
 
-	//canHeal = (Math.random() <= chanceToHeal) && (hitPoints > 0);
 	canHeal = (Math.random() <= chanceToHeal) && (this.getHitPoints() > 0);
-
 
 	if (canHeal)
 	{
 		healPoints = (int)(Math.random() * (maxHeal - minHeal + 1)) + minHeal;
 		addHitPoints(healPoints);
-	//	System.out.println(name + " healed itself for " + healPoints + " points.\n"
-	//						+ "Total hit points remaining are: " + hitPoints);
 		System.out.println(this.getName() + " healed itself for " + healPoints + " points.\n"
-				+ "Total hit points remaining are: " + this.getHitPoints());
+							+ "Total hit points remaining are: " + this.getHitPoints());
 		System.out.println();
 	}//end can heal
 

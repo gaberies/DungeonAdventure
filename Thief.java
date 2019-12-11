@@ -15,12 +15,12 @@ public class Thief extends Hero
     public Thief()
 	{
 		super("Thief", 75, 6, .8, 20, 40, .5);
-		setAttackMessage(" jcasts a spell of fireball at ");
-		this.specialSkill = new SurpriseAttack();
+
+
 
     }//end constructor
-}
-/*	public void surpriseAttack(DungeonCharacter opponent)
+
+	public void surpriseAttack(DungeonCharacter opponent)
 	{
 		double surprise = Math.random();
 		if (surprise <= .4)
@@ -41,8 +41,8 @@ public class Thief extends Hero
 
 	}//end surpriseAttack method
 
-*/
- /*   public void battleChoices(DungeonCharacter opponent)
+
+    public void battleChoices(DungeonCharacter opponent)
 	{
 		super.battleChoices(opponent);
 		int choice;
@@ -53,7 +53,7 @@ public class Thief extends Hero
 		    System.out.println("1. Attack Opponent");
 		    System.out.println("2. Surprise Attack");
 		    System.out.print("Choose an option: ");
-		    choice = Keyboard.readInt();
+		    choice = sc.nextInt();
 
 		    switch (choice)
 		    {
@@ -72,4 +72,4 @@ public class Thief extends Hero
 		} while(numTurns > 0);
 
     }
-    */
+}

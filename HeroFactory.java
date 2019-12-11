@@ -1,14 +1,19 @@
 import java.util.Scanner;
 
+/*add HeroFactory to create hero
+*/
+
 public class HeroFactory {
-    static Scanner scanner = new Scanner(System.in);
-    public Hero buildHero() {
+
+    static Scanner sc = new Scanner(System.in);
+    public Hero buildHero(){
+    	Hero hero=null;
 
         System.out.println("Choose a hero:\n" +
                 "1. Warrior\n" +
                 "2. Sorceress\n" +
                 "3. Thief");
-        int choice = scanner.nextInt();
+        int choice = sc.nextInt();
         switch (choice){
             case 1: return new Warrior();
 
