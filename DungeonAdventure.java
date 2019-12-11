@@ -13,7 +13,7 @@ public class DungeonAdventure {
 		
 		Hero hero = h.buildHero();
 		Scanner sc = new Scanner(System.in);
-		while (hero.numOfPillars != 4) {
+		while (hero.numOfPillars != 4 && hero.getHitPoints() > 0) {
 			hero.showHeroPos();
 			System.out.println("Choose what you'd like to do:");
 			System.out.println("Press 1 to move, then enter u for up, d for down l for left and r for right");
@@ -35,8 +35,11 @@ public class DungeonAdventure {
 			case 3: //use vison potion if they have one.
 				
 			case 5: //hidden menu option that prints the entire Dungeon
+			
+			default: System.out.println("Please enter a correct choice!");
 				
 			}
+			//Put display the entire Dungeon here.
 		}
 		//print Dungeon here
 ;	}
