@@ -1,158 +1,178 @@
 import java.util.Scanner;
 
-/**
- * Title: Dungeon.java
- *
- * Description: Driver file for Heroes and Monsters project
- *
- * Copyright:    Copyright (c) 2001
- * Company: Code Dogs Inc.
- * I.M. Knurdy
- *
- * History:
- *  11/4/2001: Wrote program
- *    --created DungeonCharacter class
- *    --created Hero class
- *    --created Monster class
- *    --had Hero battle Monster
- *    --fixed attack quirks (dead monster can no longer attack)
- *    --made Hero and Monster abstract
- *    --created Warrior
- *    --created Ogre
- *    --made Warrior and Ogre battle
- *    --added battleChoices to Hero
- *    --added special skill to Warrior
- *    --made Warrior and Ogre battle
- *    --created Sorceress
- *    --created Thief
- *    --created Skeleton
- *    --created Gremlin
- *    --added game play features to Dungeon.java (this file)
- *  11/27/2001: Finished documenting program
- * version 1.0
- */
-
-
-
-/*
-  This class is the driver file for the Heroes and Monsters project.  It will
-  do the following:
-
-  1.  Allow the user to choose a hero
-  2.  Randomly select a monster
-  3.  Allow the hero to battle the monster
-
-  Once a battle concludes, the user has the option of repeating the above
-
-*/
-public class Dungeon {
+public final class Dungeon {
     static Scanner sc = new Scanner(System.in);
+    String visionMap = "";
+    private static boolean hasEntrance = false;
+    private static boolean hasExit = false;
+    private  static int hasPillar = 0;
+    private static boolean dungeonCondition = false;
+    private static String visionRespone = "";
 
-    public static void main(String[] args)
-	{
+    public static Room[][] createDungeonRoom(Hero hero){
+        Room[][] rooms = new Room[5][5];
 
-		Hero theHero;
-		Monster theMonster;
+        while(hasExit == false && hasEntrance == false && hasPillar < 4) {
+            for (int i = 0; i < rooms.length; i++) {
+                for (int j = 0; j < rooms.length; j++) {
 
-		do
-		{
-		    theHero = chooseHero();
-		    theMonster = generateMonster();
-			battle(theHero, theMonster);
+                	//this room have entrance but no exit and less than 4 plillars
+                    if (hasEntrance == true && hasExit == false && hasPillar < 4) {
+                      	int random=(int)(Math.random() * 7) + 2;
 
-		} while (playAgain());
+                      	rooms[i][j] = Room.newRoom(random);
+                         if (rooms[i][j].isExit() == true) {
+                             hasExit = true;
+                         } else if (rooms[i][j].isPillar() == true) {
+                             hasPillar++;
+                         }
+                    }
+                    //this room have no entrance and no exit and less than 4 pillars
+                    else if (hasEntrance == false && hasExit == false && hasPillar < 4) {
+                        	int random=(int)(Math.random() * 7) + 1;
 
-    }//end main method
+                        	rooms[i][j] = Room.newRoom(random);
+                            if (rooms[i][j].isEntrance() == true) {
+                                hasEntrance = true;
+                            } else if (rooms[i][j].isExit() == true) {
+                                hasExit = true;
+                            } else if (rooms[i][j].isPillar() == true) {
+                                hasPillar++;
+                            }
+                    }
+                    //this room has exit and no entrance
+                    else if (hasEntrance == false && hasExit == true && hasPillar < 4) {
+                    	int random=(int)(Math.random() * 7) + 1;
 
-/*-------------------------------------------------------------------
-chooseHero allows the user to select a hero, creates that hero, and
-returns it.  It utilizes a polymorphic reference (Hero) to accomplish
-this task
----------------------------------------------------------------------*/
-	public static Hero chooseHero()
-	{
-		HeroFactory heroFactory = new HeroFactory();
-		Hero hero = heroFactory.buildHero();
-		return hero;
-	
-	}
-	/*	int choice;
-		Hero theHero;
+                    	rooms[i][j] = Room.newRoom(random);
+                        if (rooms[i][j].isEntrance() == true) {
+                            hasEntrance = true;
+                        } else if (rooms[i][j].isPillar() == true) {
+                            hasPillar++;
+                        }
+                    }
 
-		System.out.println("Choose a hero:\n" +
-					       "1. Warrior\n" +
-						   "2. Sorceress\n" +
-						   "3. Thief");
-		choice = Keyboard.readInt();
+                    //have entrance and exit
+                     else if (hasEntrance == true && hasExit == true && hasPillar < 4) {
+                    	int random=(int)(Math.random() * 7) + 3;
 
-		switch(choice)
-		{
-			case 1: return new Warrior();
+                    	rooms[i][j] = Room.newRoom(random);
+                        if (rooms[i][j].isPillar() == true) {
+                            hasPillar++;
+                        }
+                    } 
+                     else {
+                    	int random=(int)(Math.random() * 7) + 4;
+                    	rooms[i][j] = Room.newRoom(random);
+                    }
+                    
+                    rooms[i][j].setNorth(validMove(i, j + 1));
+                    rooms[i][j].setSouth(validMove(i, j - 1));
+                    
+                    rooms[i][j].setWest(validMove(i - 1, j));
+                    rooms[i][j].setEast(validMove(i + 1, j));
+                }
+            }
 
-			case 2: return new Sorceress();
+            for (int i = 0; i < rooms.length; i++) {
+                for (int j = 0; j < rooms.length; j++) {
+                    if (rooms[i][j].isEntrance() == true) {
+                        hero.setX(i);
+                        hero.setY(j);
+                    }
+                }
+            }
+        }
+        return rooms;
+    }
 
-			case 3: return new Thief();
+    public void play(Room[][] room, Hero hero){
+    	
+        while(hero.isAlive() && dungeonCondition == false) {	
+            System.out.println(room[hero.getX()][hero.getY()].toString());
 
-			default: System.out.println("invalid choice, returning Thief");
-				     return new Thief(); 
-		}//end switch
-	}//end chooseHero method    */
-		
-
-/*-------------------------------------------------------------------
-generateMonster randomly selects a Monster and returns it.  It utilizes
-a polymorphic reference (Monster) to accomplish this task.
----------------------------------------------------------------------*/
-	public static Monster generateMonster()
-	{
-		MonsterFactory monsterFactory = new MonsterFactory();
-		int choice;
-
-		choice = (int)(Math.random() * 3) + 1;
-		return monsterFactory.buildMonster(choice);
-		
-	}
-/*	public static Monster generateMonster()
-	{
-		int choice;
-
-		choice = (int)(Math.random() * 3) + 1;
-
-		switch(choice)
-		{
-			case 1: return new Ogre();
-
-			case 2: return new Gremlin();
-
-			case 3: return new Skeleton();
-
-			default: System.out.println("invalid choice, returning Skeleton");
-				     return new Skeleton();
-		}//end switch
-	}//end generateMonster method
-*/
-/*-------------------------------------------------------------------
-playAgain allows gets choice from user to play another game.  It returns
-true if the user chooses to continue, false otherwise.
----------------------------------------------------------------------*/
-	public static boolean playAgain()
-	{
-		char again;
-
-		System.out.println("Play again (y/n)?");
-		again = sc.next().charAt(0);
-
-		return (again == 'Y' || again == 'y');
-	}//end playAgain method
+            //Monster room
+            if (room[hero.getX()][hero.getY()].getNumMons() > 0) {
+            	System.out.println("You encounter a Goblin!");
+                battle(hero, room[hero.getX()][hero.getY()].getMonster());
+                room[hero.getX()][hero.getY()].setNumMons(0);
+            }
+            //Healing pot room
+            else if(room[hero.getX()][hero.getY()].isHealingPot() == true){
+            	room[hero.getX()][hero.getY()].setHealingPot(false);
+                hero.setNumPotions(hero.getNumPotions()+1);
+                System.out.println("Found a healing potion in this room!");
+                System.out.println(hero.getName() + " has " + hero.getNumPotions() + " Healing potion(s)");
+            
+            }
+            //Pit room
+            else if(room[hero.getX()][hero.getY()].isPit() == true){
+            	room[hero.getX()][hero.getY()].setPit(false);
+                hero.subtractHitPoints((int)(Math.random() * 20) + 1);
 
 
-/*-------------------------------------------------------------------
-battle is the actual combat portion of the game.  It requires a Hero
-and a Monster to be passed in.  Battle occurs in rounds.  The Hero
-goes first, then the Monster.  At the conclusion of each round, the
-user has the option of quitting.
----------------------------------------------------------------------*/
-	public static void battle(Hero theHero, Monster theMonster)
+                System.out.println("Ough! You felt in the pit and got damaged!");
+                System.out.println(hero.getName() + " has " + hero.getHitPoints() + " HP left");
+            }
+            //Pillar room
+            else if(room[hero.getX()][hero.getY()].isPillar() == true){
+                hero.setNumPillars(hero.getNumPillars()+1);
+                room[hero.getX()][hero.getY()].setPillar(false);
+                System.out.println("That's a great move! YOU FOUND A PILLAR!");
+                if(hero.getNumPillars() >= 4){
+                    System.out.println("You have reached :" + hero.getNumPillars() + " pillars, AMAZING!");
+                    dungeonCondition = true;
+                    break;
+                }
+            }
+            //Vision Potion room
+           else if(room[hero.getX()][hero.getY()].isVisionPot() == true) {
+            	hero.setNumVisionPotions(hero.getNumPotions()+1);
+                room[hero.getX()][hero.getY()].setVisionPot(false);
+                System.out.println("You entered  The Vision Potion room!  It will help you see current room as well as rooms surrounding!");
+                System.out.print("For your vision that show the maze press M, anything else to deny ->");
+                visionRespone = sc.next().toLowerCase();
+                if(visionRespone.equals("m")) {
+                	//visionMap += dungeonRooms[hero.getX()][hero.getY()].toString();
+                	visionMap = toString(room, hero);
+                    System.out.print(visionMap); //THIS WILL PRINT THE 8 ROOMS INFO IN MAZE...
+                }
+
+             } 
+          //  }
+
+            System.out.println("........REPORT........");
+            System.out.println("Name: "+hero.getName() + "\n"
+                             +  "HP: "+ hero.getHitPoints() + "\n"
+                             +  "Potion(s) left: " + hero.getNumPotions() + "\n"
+                             +  "Vision Potion(s) left: " + hero.getNumVisionPotions() + "\n"
+                             +  "Pillar(s): " + hero.getNumPillars() + " /4." + "\n");
+            System.out.println("........CURRENT LOCATION........");
+
+            if(!hero.isAlive()){
+                break;
+            }
+
+            if(hero.getNumPotions() > 0) {
+                System.out.println("Would you prefer to use any potions? Y/N ->");
+                char response = sc.next().charAt(0);
+                if(response == 'y' || response == 'Y')
+                    hero.drinkHealingPotion();
+                else System.out.println("Okay let's keep going!");
+            }
+
+            if(!hero.isAlive()){
+                break;
+            }
+            System.out.println(room[hero.getX()][hero.getY()].toString());
+            System.out.println("You are at: [" + hero.getX() + "][" + hero.getY() + "]");
+            System.out.println("................................");
+            canMove(room[hero.getX()][hero.getY()], hero);
+    }
+    
+}
+
+    public static void battle(Hero theHero, Monster theMonster)
 	{
 		char pause = 'p';
 		System.out.println(theHero.getName() + " battles " +
@@ -213,5 +233,98 @@ user has the option of quitting.
 	//	return true;
 	}
 
+    public static void canMove(Room room, Hero hero){
+    	
+    	room.setNorth(validMove(hero.getX()-1,hero.getY()));
+        room.setSouth(validMove(hero.getX()+1,hero.getY()));
+    	room.setWest(validMove(hero.getX(),hero.getY()-1));
+        room.setEast(validMove(hero.getX(),hero.getY()+1));
+        
+        System.out.println("\nThere is your valid moves: ");
+        if(room.isNorth()) {
+        	System.out.println("North(up)");
+        }
+        if(room.isWest()) {
+        	 System.out.println("South(down)");
+        }
+        if(room.isWest()) {
+        	System.out.println("West(left)");
+        }
+        if(room.isEast()) {
+        	System.out.println("East(right)");
+        }
+        
+        System.out.print("Enter N for North, S for South, W for West, E for East. You choose > ");
 
-}//end Dungeon class
+        char makeMove = sc.next().charAt(0);
+        moveMyHero(room, hero, makeMove);
+    }
+
+    public static boolean validMove(int x, int y) {
+        return x>=0 && x <=4 && y >= 0 && y <= 4;
+    }
+
+    public static void moveMyHero(Room room, Hero hero, char move){
+    	boolean pass =false;
+
+        while (pass==false){
+            if(move == 'N' || move == 'n' && room.isNorth()== true){
+            	hero.setX(hero.getX() - 1);
+            	pass = true;
+            }
+
+            else if(move == 'S' || move == 's' && room.isSouth()== true ){
+            	hero.setX(hero.getX() + 1);
+            	pass = true;
+            }
+
+            else if(move == 'W' || move == 'w' && room.isWest()== true ){
+            	hero.setY(hero.getY() - 1);
+            	pass = true;
+            }
+
+            else if(move == 'E' || move == 'e' && room.isEast()== true ){
+            	hero.setY(hero.getY() + 1);
+            	pass = true;
+            }
+        }
+    }
+
+       //This method will give hero vision
+       public String toString(Room[][] room, Hero hero){
+    	
+    	String vision="";
+    	for(int x = hero.getX(); x < room.length; x++) {
+            for (int y = hero.getY(); y < room.length; y++) {
+            	vision += "room's coordinate: [" + (x-1 )+ "][" + (y-2) + "]" + "\n";
+            	vision += "room's coordinate: [" + x + "][" + (y-1) + "]" + "\n";
+            	vision += "room's coordinate: [" + (x+1) + "][" + (y-1) + "]" + "\n";
+            	vision += "room's coordinate: [" + (x-1) + "][" + y + "]" + "\n";
+            	vision += "room's coordinate: [" + x + "][" + y + "]" + "\n";
+            	vision += "room's coordinate: [" + (x+1) + "][" + y + "]" + "\n";
+            	vision += "room's coordinate: [" + (x-1) + "][" + (y+1) + "]" + "\n";
+            	vision += "room's coordinate: [" + x + "][" + (y+1) + "]" + "\n";
+            	vision += "room's coordinate: [" + (x+1) + "][" + (y+1) + "]" + "\n";
+                
+                vision += room[x][y].toString();
+            }
+        }
+       return vision;
+  }
+   /*  public String theMap(Room[][] dungeon){
+        String map ="";
+        for(int i = 0; i < dungeon.length; i++) {
+            for (int j = 0; j < dungeon.length; j++) {
+                theWholeMap += "\nroom's coordinate: [" + i + "][" + j + "]" + "\n";
+                theWholeMap += dungeon[i][j].toString();
+
+            }
+        }
+
+        return map;  } */
+ }
+
+
+
+
+
