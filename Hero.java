@@ -36,6 +36,10 @@ public abstract class Hero extends DungeonCharacter {
 	private double chanceToBlock;
 	protected int numTurns;
 	protected SkillBehavior specialSkill;
+	
+	//add:
+	private int numPotions, numVisionPots, numPillars, x, y;
+
 
 //-----------------------------------------------------------------
 //calls base constructor and gets name of hero from user
@@ -44,6 +48,9 @@ public abstract class Hero extends DungeonCharacter {
 		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
 		this.chanceToBlock = chanceToBlock;
 		// readName();
+		this.numPotions = 0;
+		this.numPillars = 0;
+		this.numVisionPots = 0;
 		System.out.print("Enter character name: ");
 		name = sc.nextLine();
 		setName(name);
@@ -69,6 +76,37 @@ public abstract class Hero extends DungeonCharacter {
 		specialSkill.execute(this, opponent);
 		numTurns--;
 	  }
+	
+	 public void setX(int x) { this.x = x; }
+	 public void setY(int y) { this.y = y; }
+	 public int getX() { return x; }
+	 public int getY() {	return y; }
+	  
+	 public void drinkHealingPotion() {
+		    int healAmount = (int)(Math.random() * 15) + 1;
+			if(this.numPotions > 0){
+				addHitPoints(healAmount);
+				this.numPotions--;
+				System.out.println("You absorb: " + healAmount + "HP");
+				System.out.println(this.getName() + " has " + this.getHitPoints() + "HP after using a potion.");
+			}
+			else System.out.println("You have no healing potion.");
+		}
+	public void setNumPotions(int numPots) { this.numPotions = numPots; }
+	public int getNumPotions() { return numPotions; }
+	public int getNumVisionPotions() { return numVisionPots; }
+	public void setNumVisionPotions(int visionPot) { this.numVisionPots=visionPot; }
+	public int getNumPillars() { return numPillars; }
+	public void setNumPillars(int numP) { this.numPillars = numP; }
+
+	@Override
+	public String toString() {
+			return "Name: "+getName() + "\n"
+	        +  "HP: "+ getHitPoints() + "\n"
+	        +  "Potion(s) left: " + numPotions + "\n"
+	        +  "Vision Potion(s) left: " + numVisionPots + "\n"
+	        +  "Pillar(s): " + numPillars + " /4." + "\n";
+	}
 
 	/*-------------------------------------------------------
 	readName obtains a name for the hero from the user
